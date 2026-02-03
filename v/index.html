@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick's Valentine Invite 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Montserrat:wght@300;400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            background-color: #FFC5D3;
+        }
+
+        /* 1. THE EMOJI LAYER - SITS ON TOP */
+        #emoji-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allows you to click "through" them to buttons */
+            z-index: 50; 
+        }
+
+        /* 2. THE CONTENT PAGES */
+        .page {
+            position: absolute;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .page.active {
+            display: flex;
+        }
+
+        #page1 {
+            background-image: url("bg.jpeg"); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+        }
+
+        /* Subtle overlay to help white text pop */
+        #page1::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: -1;
+        }
+
+        #page2 {
+            background: linear-gradient(-45deg, #ff758f, #ff9a9e, #fad0c4, #ffd1ff);
+            background-size: 400% 400%;
+            animation: dreamyGradient 10s ease infinite;
+        }
+
+        @keyframes dreamyGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .invite-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            animation: floatingCard 4s ease-in-out infinite;
+            z-index: 60;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 8vw, 4rem);
+            margin-bottom: 10px;
+            font-style: italic;
+            text-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .cutesy-header {
+            font-family: 'Caveat', cursive;
+            font-size: 2.2rem;
+            color: #d63384;
+            display: block;
+        }
+
+        p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .location {
+            font-weight: 600;
+            display: block;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #d63384;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+
+        /* 3. BUTTONS - HIGHEST Z-INDEX SO THEY STAY CLICKABLE */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            z-index: 100; 
+        }
+
+        button {
+            font-family: 'Montserrat', sans-serif;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        #yesBtn { background: #fff; color: #d63384; }
+        #noBtn { background: rgba(0, 0, 0, 0.6); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+
+        /* 4. THE FLOATING ANIMATION */
+        .emoji-item {
+            position: absolute;
+            bottom: -50px;
+            user-select: none;
+            animation: moveUp var(--speed) linear forwards;
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.5); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes floatingCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="emoji-layer"></div>
+
+    <div class="page active" id="page1">
+        <h1>Nick, Will you be my Valentine?</h1>
+        <p>A simple choice for a beautiful day</p>
+        <div class="buttons">
+            <button id="yesBtn">Yes ✨</button>
+            <button id="noBtn">No 🙄</button>
+        </div>
+    </div>
+
+    <div class="page" id="page2">
+        <div class="invite-card">
+            <span class="cutesy-header">Yay! Best choice ever...</span>
+            <h1>It's US forever</h1>
+            <p>I knew you'd make the right choice.</p>
+            <span class="location">Vin Populi 🥂 Saturday 14/02</span>
+        </div>
+    </div>
+
+    <script>
+        const layer = document.getElementById('emoji-layer');
+        const emojis = ["💖", "💗", "✨", "🤍", "🌸", "🎀", "🧸", "🥂", "🦋", "💘", "🌹", "🧸"];
+
+        // Function to create one emoji
+        function spawnEmoji() {
+            const span = document.createElement('span');
+            span.className = 'emoji-item';
+            span.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            // Random properties
+            const left = Math.random() * 100;
+            const size = 20 + Math.random() * 30;
+            const speed = 4 + Math.random() * 4;
+            
+            span.style.left = left + 'vw';
+            span.style.fontSize = size + 'px';
+            span.style.setProperty('--speed', speed + 's');
+            
+            layer.appendChild(span);
+
+            // Clean up to keep the site fast
+            setTimeout(() => { span.remove(); }, speed * 1000);
+        }
+
+        // Start the storm immediately! (1 emoji every 150ms)
+        let stormInterval = setInterval(spawnEmoji, 150);
+
+        // Transition Logic
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+
+        noBtn.addEventListener("mouseenter", () => {
+            noBtn.style.position = "fixed"; 
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+        });
+
+        yesBtn.addEventListener("click", () => {
+            document.getElementById("page1").classList.remove("active");
+            document.getElementById("page2").classList.add("active");
+            
+            // Increase to "CRAZY" mode on page 2
+            clearInterval(stormInterval);
+            stormInterval = setInterval(spawnEmoji, 50); 
+        });
+    </script>
+</body>
+</html>
